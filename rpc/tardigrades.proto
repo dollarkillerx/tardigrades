@@ -1,0 +1,31 @@
+syntax = "proto3";
+package rpc;
+option go_package = ".;rpc";
+
+
+message DeploymentReq {
+  string token = 1;       // 用户TOKEN
+  string project_id = 2;  // 项目ID
+  bytes data = 3;         // zip 压缩文件
+}
+
+message DeploymentResp {
+  string queue_id = 1; // 排队ID
+  int32  queue = 2;    // 队伍长度
+  string error = 3;    // 错误信息  , == "" 则没有错误
+}
+
+message StatsReq {
+  string token = 1;       // 用户TOKEN
+  string queue_id = 2;    // 排队ID
+}
+
+message StatsResp {
+  int32  queue = 1;    // 队伍长度
+  string error = 2;    // 错误信息  , == "" 则没有错误
+}
+
+service Tardigrades {
+  rpc Deployment(DeploymentReq) returns (DeploymentResp); // 执行CD
+  rpc Stats(StatsReq) returns(StatsResp);  // 获取任务状态
+}
